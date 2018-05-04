@@ -112,43 +112,34 @@ class HomeScreen extends React.Component {
   //   // No state update necessary
   //   return null;
   // }
-  async componentWillMount() {}
 
   async componentDidUpdate(prevProps, prevState) {
     // if (prevState.profileOrError === null) {
     //   // At this point, we're in the "commit" phase, so it's safe to load the new data.
     //   this._loadUserData();
     // }
-    console.log("pppppp", this.props.region);
-    if (this.state.current !== this.props.region)
-      await AsyncStorage.getItem(CONFIG.STORAGE.AVAILABLE_REGIONS).then(
-        result => {
-          // console.log("resiiiiiiiiii is", result);
-          if (result) {
-            console.log("-----------------------------------");
-            let list = JSON.parse(result);
-            // console.log(list);
-            let name = this.props.region;
-            console.log("nnnnnnnnnnn", name);
+    console.log("pppppp pppp oooo ", this.props.region);
+    console.log("p hhh  jjjj h hh h h ", this.state.current);
 
-            // list.splice(name, 1);
-            // console.log(list);
-            my_array = list.filter(function(el) {
-              // console.log("ssssssss", el.snippet.gl);
-              return el.snippet.name !== "Australia";
-            });
-
-            console.log("My array is ", my_array);
-            // this.setState({ current: result });
-          }
-        }
-      );
-
-    console.log("MMMMM ------------>", this.state.current);
+    if (this.state.current !== this.props.region) {
+      console.log("p oooo ooo o oo o", this.props.region);
+      let r = this.props.region;
+      this.props.dispatch({
+        type: CONFIG.STORAGE.CURRENT_REGION,
+        payload: { region: r }
+      });
+    }
+    // this._fechData();
   }
 
   componentDidMount() {
-    this._fechData();
+    let r = this.props.region;
+    this.props.dispatch({
+      type: CONFIG.STORAGE.CURRENT_REGION,
+      payload: { region: r }
+    });
+
+    this._fechData(this.props.region);
     // await AsyncStorage.getItem(CONFIG.STORAGE.CURRENT_REGION).then(result => {
     //   console.log("res is", result);
     //   if (result) {
@@ -160,13 +151,13 @@ class HomeScreen extends React.Component {
     // });
   }
 
-  _fechData() {
+  _fechData(reg) {
     const qp = "&part=snippet,id&order=rating&maxResults=20";
     const { BASE_URL, API_KEY } = CONFIG.YOUTUBE;
-    console.log("R --->", this.props.region);
-    fetch(
-      `${BASE_URL}/search?key=${API_KEY}${qp}&regioncode=${this.state.current}`
-    )
+
+    console.log("R is D --->", reg);
+
+    fetch(`${BASE_URL}/search?key=${API_KEY}${qp}&regioncode=${reg}`)
       .then(res => res.json())
       .then(res => {
         // console.log("res is -------->", res);

@@ -31,7 +31,7 @@ class SettingScreen extends React.Component {
 
   componentDidMount() {
     // const { params } = this.props.navigation.state;
-    const qp = "&part=snippet&hl=es_MX";
+    const qp = "&part=snippet,id";
     const { BASE_URL, API_KEY } = CONFIG.YOUTUBE;
     fetch(`${BASE_URL}/i18nRegions?key=${API_KEY}${qp}`)
       .then(res => res.json())
@@ -111,7 +111,7 @@ class SettingScreen extends React.Component {
             <Picker.Item
               key={index}
               label={region.snippet.name}
-              value={region.snippet.name}
+              value={region.snippet.gl}
             />
           ))}
         </Picker>
